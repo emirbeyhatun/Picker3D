@@ -59,12 +59,12 @@ public class Checkpoint : MonoBehaviour
     }
     public IEnumerator StartCheckpointAnimation(float timer)
     {
-        yield return new WaitForSeconds(timer*0.5f);
+        yield return new WaitForSeconds(timer*0.4f);
         DisableSideColliders();
 
         yield return new WaitForSeconds(timer*0.25f);
         SetNewPlatformAnimation();
-        yield return new WaitForSeconds(timer*0.25f);
+        yield return new WaitForSeconds(timer*0.35f);
         LevelManager.LevelManagerInstance.CollectedAmountByLevel += CollectablesCurrentCount;
         //SetNewPlatformColliders();
         GateAnimator.SetBool("OpenGate", true);

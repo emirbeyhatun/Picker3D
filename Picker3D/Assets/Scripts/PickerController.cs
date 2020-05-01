@@ -8,14 +8,21 @@ public class PickerController : MonoBehaviour
     public float ForwardSpeed = 10f;
     public float SideSpeed = 0.1f;
     public float PushForceOnCheckpoint = 1;
+    public float XposSpeed = 3;
+    public float XposLimit = 1.5f;
     public Material GreenMat;
     public BoxCollider BoundsCollider;
+    public Transform SideMovementParent;
     public static PickerController PickerInstance{ get {return pickerInstance;}}
     private static PickerController pickerInstance;
     private Rigidbody RgdBody;
     private Vector3 TempVector;
     private bool EnableMoving = true;
     private Vector3 ForwardDirection;
+    private Vector3 FirstTouchPos;
+    private float TouchXDiff;
+    private float TouchXDiffClamped;
+    private bool IsTouching = false;
 
     void Awake()
     {
@@ -33,8 +40,36 @@ public class PickerController : MonoBehaviour
     void Update()
     {
         CheckIfCollectablesInside();
-    }
 
+        foreach(Touch touch in Input.touches)
+        {
+            if (touch.phase == TouchPhase.Began)
+            {
+                TempVector = touch.position;
+                TempVector.x += TouchXDiffClamped;
+                FirstTouchPos = TempVector;
+                IsTouching = true;
+               // print("First TOUCH POS "+ touch.position);
+            }
+            if (touch.phase == TouchPhase.Ended)
+            {
+                // FirstTouchPos = touch.position;
+                IsTouching = false;
+               // print("First TOUCH POS "+ touch.position);
+            }
+            
+            if(IsTouching == true)
+            {
+                TouchXDiff = FirstTouchPos.x - touch.position.x;
+            }
+            // print("TOUCH POS "+ touch.position);
+            // print("XDIFF "+ (FirstTouchPos.x - touch.position.x) );
+        }
+        if(IsTouching == true)
+        {
+            MoveSideWithPhysics();
+        }
+    }
     void FixedUpdate()
     {
         if(EnableMoving == true)
@@ -48,14 +83,12 @@ public class PickerController : MonoBehaviour
             TempVector.z = 0;
             RgdBody.velocity = TempVector;
         }
-
-        MoveSideWithPhysics();
     }
 
     private void CheckIfCollectablesInside()
     {
         LevelController lvl = LevelManager.LevelManagerInstance.GetCurrentLevel();
-        print("lvl.Levelnu "+ lvl.LevelNumber);
+        //print("lvl.Levelnu "+ lvl.LevelNumber);
         if(lvl == null)
         return;
     
@@ -119,29 +152,41 @@ public class PickerController : MonoBehaviour
 
     void MoveSideWithPhysics()
     {
-        if(Input.GetKey(KeyCode.LeftArrow))
+        if(SideMovementParent)
         {
-            TempVector = RgdBody.velocity;
-            TempVector.x = SideSpeed;
-            RgdBody.velocity = TempVector;
-            // transform.Translate(Vector3.right*SideSpeed, Space.Self);
-        }
-        else
-        {
-            if(Input.GetKey(KeyCode.RightArrow))
+            float clampedDif = (TouchXDiff/(Screen.width / 2))*XposSpeed;
+            if(Mathf.Abs(clampedDif) <= XposLimit)
             {
-                TempVector = RgdBody.velocity;
-                TempVector.x = SideSpeed*-1;
-                RgdBody.velocity = TempVector;
-                // transform.Translate(Vector3.right*SideSpeed, Space.Self);
+                TouchXDiffClamped = TouchXDiff;
             }
-            else
-            {
-                TempVector = RgdBody.velocity;
-                TempVector.x = 0;
-                RgdBody.velocity = TempVector;
-            }
+            float newXpos = Mathf.Clamp(clampedDif, -XposLimit, XposLimit);
+            TempVector = SideMovementParent.transform.localPosition;
+            TempVector.x = newXpos;
+            SideMovementParent.localPosition = TempVector;
         }
+        // if(Input.GetKey(KeyCode.LeftArrow))
+        // {
+        //     TempVector = RgdBody.velocity;
+        //     TempVector.x = SideSpeed;
+        //     RgdBody.velocity = TempVector;
+        //     // transform.Translate(Vector3.right*SideSpeed, Space.Self);
+        // }
+        // else
+        // {
+        //     if(Input.GetKey(KeyCode.RightArrow))
+        //     {
+        //         TempVector = RgdBody.velocity;
+        //         TempVector.x = SideSpeed*-1;
+        //         RgdBody.velocity = TempVector;
+        //         // transform.Translate(Vector3.right*SideSpeed, Space.Self);
+        //     }
+        //     else
+        //     {
+        //         TempVector = RgdBody.velocity;
+        //         TempVector.x = 0;
+        //         RgdBody.velocity = TempVector;
+        //     }
+        // }
     }
 
     public void StopMoving()

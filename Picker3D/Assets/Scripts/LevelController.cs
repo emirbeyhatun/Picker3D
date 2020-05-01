@@ -28,7 +28,7 @@ public class LevelController : MonoBehaviour
         }
         else if(CheckpointIndex + 1  == Checkpoints.Count)
         {
-            print("FINISH LEVEL ");
+            //print("FINISH LEVEL ");
             ProgressbarCurrentIndex = CheckpointIndex  + 1;
             StartCoroutine(DelayLevelSet());
         }
@@ -47,7 +47,7 @@ public class LevelController : MonoBehaviour
     }
     public List<Collectable> GetCheckpointCollectables()
     {
-         print("CheckpointIndex "+ CheckpointIndex);
+         //print("CheckpointIndex "+ CheckpointIndex);
         if(CheckpointIndex < Checkpoints.Count && CheckpointIndex >= 0)
         {
             if(Checkpoints[CheckpointIndex]!= null)
@@ -77,7 +77,7 @@ public class LevelController : MonoBehaviour
                 }
             }
         }
-        print("currentCheckpoint: "+ currentCheckpoint + "  checkpointCount : "+ checkpointCount);
+        //print("currentCheckpoint: "+ currentCheckpoint + "  checkpointCount : "+ checkpointCount);
     }
 
     public int GetProgressbarIndex()

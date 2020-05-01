@@ -180,6 +180,7 @@ public class LevelManager : MonoBehaviour
     public void StartNewLevelUI()
     {
         countedNum = 0;
+        EnableProgresbar(true);
         MenuUI.SetActive(true);
         CollectBtn.gameObject.SetActive(true);
         GainedDiamonAmountText.text = CollectedAmountByLevel.ToString();
@@ -195,7 +196,6 @@ public class LevelManager : MonoBehaviour
         ClearDiamondList();
         MenuUI.SetActive(false);
         PickerController.PickerInstance.StartMoving();
-        EnableProgresbar(true);
     }
 
     public void CollectDiamonds()
@@ -238,7 +238,7 @@ public class LevelManager : MonoBehaviour
                 DiamondAnimList[i].gameObject.SetActive(false);
                 continue;
             }
-            DiamondAnimList[i].transform.Translate(dirr.normalized*DiamondAnimSpeed, Space.World);
+            DiamondAnimList[i].transform.Translate(dirr.normalized*DiamondAnimSpeed*Time.deltaTime, Space.World);
         }
     }
     public void ClearDiamondList()
