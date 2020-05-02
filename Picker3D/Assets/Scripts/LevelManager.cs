@@ -10,6 +10,9 @@ public class LevelManager : MonoBehaviour
     public float LevelLength = 290;
     public float LevelSetDelay = 1.5f;
     public float ProgressbarSetDelay = 6f;
+    public float DiamondAnimSpaceBetween = 0.05f;
+    public float DiamondAnimRotationDegree = 10;
+    public float DiamondAnimSpeed = 5f;
     public List<LevelController> Levels;
     [Header("UI References")]
     public Text CurrentDiamonAmountText;
@@ -19,6 +22,7 @@ public class LevelManager : MonoBehaviour
     public List<Image> CheckpointBars;
     public GameObject ProgressBar;
     public GameObject MenuUI;
+    public GameObject RestartMenuUI;
     public Button CollectBtn;
     public Button ResumeBtn;
     public Material FullBarMat;
@@ -39,7 +43,6 @@ public class LevelManager : MonoBehaviour
 
     public static LevelManager LevelManagerInstance{ get {return levelManagerInstance;}}
 
-    public float DiamondAnimSpeed = 5f;
     private Camera Cam;
 
     void Awake()
@@ -60,6 +63,18 @@ public class LevelManager : MonoBehaviour
         EnableProgresbar(true);
     }
 
+    public void ResetLevel()
+    {
+        CurrentLevel.ResetCheckpoints();
+        CurrentLevel.SetCheckpointIndex(-1);
+        CurrentLevel.SetCheckpoint();
+
+        if(CurrentLevel.PickerStartTransf)
+        {
+            RestartMenuUI.SetActive(true);
+            PickerController.PickerInstance.transform.position =  CurrentLevel.PickerStartTransf.position;
+        }
+    }
 
     void Update()
     {
@@ -200,7 +215,7 @@ public class LevelManager : MonoBehaviour
 
     public void CollectDiamonds()
     {
-        StartCoroutine(CollectDiamondsAnimation(0.05f));
+        StartCoroutine(CollectDiamondsAnimation(DiamondAnimSpaceBetween));
     }
 
     IEnumerator CollectDiamondsAnimation(float secs)
@@ -218,17 +233,17 @@ public class LevelManager : MonoBehaviour
     int countedNum;
     private void PlayDiamondAnim()
     {
-        Vector3 rotationVec = new Vector3(0,0,5);
+        Vector3 rotationVec = new Vector3(0,0,DiamondAnimRotationDegree);
         for (int i = 0; i < DiamondAnimList.Count; i++)
         {
             if(DiamondAnimList[i].gameObject.activeSelf == false)
             continue;
 
-            Vector3 targetPoint = Cam.WorldToScreenPoint(CurrentDiamonAmountText.transform.parent.position);
-            Vector3 startPoint = Cam.WorldToScreenPoint(DiamondAnimList[i].transform.position);
-            Vector3 dirr = startPoint - targetPoint; 
-            dirr.z = DiamondAnimList[i].transform.position.z;
+            Vector3 targetPoint = CurrentDiamonAmountText.transform.parent.position;
+            Vector3 startPoint = DiamondAnimList[i].transform.position;
 
+            Vector3 dirr = targetPoint - startPoint ; 
+            dirr.z = 0;
             DiamondAnimList[i].transform.Rotate(rotationVec, Space.Self);
             
             if(dirr.magnitude < 5f)

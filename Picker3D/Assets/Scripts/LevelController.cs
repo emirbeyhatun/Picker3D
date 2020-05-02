@@ -7,6 +7,7 @@ public class LevelController : MonoBehaviour
 {
     public List<Checkpoint> Checkpoints;
     public int LevelNumber = 1;
+    public Transform PickerStartTransf;
     private Checkpoint CurrentCheckpoint;
     private int CheckpointIndex = -1;
     [HideInInspector]
@@ -31,6 +32,17 @@ public class LevelController : MonoBehaviour
             //print("FINISH LEVEL ");
             ProgressbarCurrentIndex = CheckpointIndex  + 1;
             StartCoroutine(DelayLevelSet());
+        }
+    }
+
+    public void ResetCheckpoints()
+    {
+        if(Checkpoints.Count > 0 )
+        {
+            for (int i = 0; i < Checkpoints.Count; i++)
+            {
+                Checkpoints[i].ResetCheckpoint();
+            }
         }
     }
 

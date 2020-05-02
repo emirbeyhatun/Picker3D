@@ -10,13 +10,21 @@ public class Checkpoint : MonoBehaviour
     public int CollectablesLimit;
     private int CollectablesCurrentCount;
     public Text CollectableInfoText;
+    [HideInInspector]
     public List<Collectable> Collectables;
+    public GameObject CollectablePrefab;
+    public Transform CollectableSpawnPos;
     private Animator GateAnimator;
     public GameObject NewPlatform;
+    [HideInInspector]
+    public CheckpointTrigger Trigger;
 
     void Awake()
     {
+        Collectables = new List<Collectable>();
         GateAnimator = GetComponentInChildren<Animator>();
+        Trigger = GetComponentInChildren<CheckpointTrigger>();
+        InitiateCollectables();
     }
     void Update()
     {
@@ -24,6 +32,20 @@ public class Checkpoint : MonoBehaviour
         UpdateUI();
     }
 
+    void InitiateCollectables()
+    {
+        GameObject collectables = Instantiate(CollectablePrefab, CollectableSpawnPos.position, CollectableSpawnPos.rotation, CollectableSpawnPos);
+        Collectable[] collectableCollection = collectables.GetComponentsInChildren<Collectable>();
+        Collectables.AddRange(collectableCollection);
+    }
+    void DestroyCollectables()
+    {
+        foreach (Collectable item in Collectables)
+        {
+            Destroy(item.gameObject);
+        }
+        Collectables.Clear();
+    }
     private void CheckIfCollectablesInside()
     {
         LevelController lvl = LevelManager.LevelManagerInstance.GetCurrentLevel();
@@ -60,23 +82,42 @@ public class Checkpoint : MonoBehaviour
     public IEnumerator StartCheckpointAnimation(float timer)
     {
         yield return new WaitForSeconds(timer*0.4f);
-        DisableSideColliders();
+
+        if(CollectablesCurrentCount < CollectablesLimit)
+        {
+            LevelManager.LevelManagerInstance.ResetLevel();
+            yield break;
+        }
+        else
+        {
+            DisableSideColliders(false);
+        }
 
         yield return new WaitForSeconds(timer*0.25f);
         SetNewPlatformAnimation();
         yield return new WaitForSeconds(timer*0.35f);
+
         LevelManager.LevelManagerInstance.CollectedAmountByLevel += CollectablesCurrentCount;
         //SetNewPlatformColliders();
         GateAnimator.SetBool("OpenGate", true);
         LevelManager.LevelManagerInstance.SetNextCheckpointCollectables();
         PickerController.PickerInstance.StartMoving();
     }
-
-    public void DisableSideColliders()
+    public void ResetCheckpoint()
+    {
+        DestroyCollectables();
+        InitiateCollectables();
+        DisableSideColliders(true);
+        NewPlatform.GetComponent<Animator>().Rebind();
+        NewPlatform.SetActive(false);
+        GateAnimator.Rebind();
+        Trigger.isActive = true;
+    } 
+    public void DisableSideColliders(bool flag)
     {
         for (int i = 0; i < SideColliders.Count; i++)
         {
-            SideColliders[i].enabled = false;
+            SideColliders[i].enabled = flag;
         }
     }
 

@@ -15,6 +15,12 @@ ScriptsOnlyBuild:
     - UnityEditor.Tilemaps.GridPalettes
     - UnityEditor.Tilemaps.SceneViewGridManager
     - UnityEditor.Tilemaps.TileDragAndDropManager
+    UnityEditor.Graphs.dll:
+    - UnityEditor.Graphs.AnimationBlendTree.Graph
+    - UnityEditor.Graphs.AnimationBlendTree.GraphGUI
+    - UnityEditor.Graphs.AnimationStateMachine.Graph
+    - UnityEditor.Graphs.AnimationStateMachine.GraphGUI
+    - UnityEditor.Graphs.AnimatorControllerTool
     UnityEditor.TestRunner.dll:
     - UnityEditor.TestTools.TestRunner.Api.CallbacksHolder
     - UnityEditor.TestTools.TestRunner.TestListCacheData
@@ -113,11 +119,11 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 11014}
     - Class: 114
-      Script: {instanceID: 11294}
+      Script: {instanceID: 11296}
     - Class: 114
-      Script: {instanceID: 11472}
+      Script: {instanceID: 11474}
     - Class: 114
-      Script: {instanceID: 11916}
+      Script: {instanceID: 11920}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
@@ -297,7 +303,7 @@ ScriptsOnlyBuild:
     className: PhysicsRaycaster
   - hash:
       serializedVersion: 2
-      Hash: f70af3795953cb5f849d50ea22a98e9e
+      Hash: a3c6899f88a79c7833b50faeb4630e2f
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: Checkpoint
@@ -387,7 +393,7 @@ ScriptsOnlyBuild:
     className: ControlPlayableAsset
   - hash:
       serializedVersion: 2
-      Hash: e7546b7c125aad0306f721f20ab9d3b6
+      Hash: 34aaf2b538882e069b0dc17d17cfdb16
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: PickerController
@@ -423,7 +429,7 @@ ScriptsOnlyBuild:
     className: NetworkTransformVisualizer
   - hash:
       serializedVersion: 2
-      Hash: 203444605cf1470e4547657e008135c1
+      Hash: edc23d1174724f99f55a540b5a1b6d93
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: LevelController
@@ -471,7 +477,7 @@ ScriptsOnlyBuild:
     className: TMP_SpriteAnimator
   - hash:
       serializedVersion: 2
-      Hash: 6e665db5f912fbd7a10c71fb4331f497
+      Hash: 72a99eefdd2d9d9d48ac0b8b2f3c5910
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: LevelManager
@@ -559,6 +565,12 @@ ScriptsOnlyBuild:
     assemblyName: UnityEngine.UI.dll
     namespaceName: UnityEngine.EventSystems
     className: Physics2DRaycaster
+  - hash:
+      serializedVersion: 2
+      Hash: 71bb6a6b6c8f052f948db64c7dd3ca4f
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: examplescene
   - hash:
       serializedVersion: 2
       Hash: 318c6c13a19c9fac98135ae14889de1b
