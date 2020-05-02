@@ -213,6 +213,14 @@ public class LevelManager : MonoBehaviour
         PickerController.PickerInstance.StartMoving();
     }
 
+    public void RestartTheGame()
+    {
+        StopAllCoroutines();
+        CollectedAmountByLevel = 0;
+        MenuUI.SetActive(false);
+        PickerController.PickerInstance.StartMoving();
+    }
+
     public void CollectDiamonds()
     {
         StartCoroutine(CollectDiamondsAnimation(DiamondAnimSpaceBetween));

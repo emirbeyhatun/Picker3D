@@ -200,6 +200,18 @@ public class PickerController : MonoBehaviour
                     {
                         TouchXDiffClamped = TouchXDiff;
                     }
+                    else
+                    {
+                        float clippedDif = Mathf.Abs(Mathf.Abs(TouchXDiff) - Mathf.Abs(((XposLimitNoPhys/SideSpeedNoPhys)*(Screen.width / 2))));
+                        if(TouchXDiff > 0)
+                        {
+                            FirstTouchPos.x -= clippedDif;
+                        }
+                        else
+                        {
+                            FirstTouchPos.x += clippedDif;
+                        }
+                    }
                     float newXpos = Mathf.Clamp(clampedDif, -XposLimitNoPhys, XposLimitNoPhys);
                     TempVector = SideMovementParent.transform.localPosition;
                     TempVector.x = newXpos;
@@ -216,9 +228,22 @@ public class PickerController : MonoBehaviour
                 {
                     
                     float clampedDif = (TouchXDiff/(Screen.width / 2))*SideSpeedPhyTargetSpeed;
+
                     if(Mathf.Abs(clampedDif) <= XposLimitPhys)
                     {
                         TouchXDiffClamped = TouchXDiff;
+                    }
+                    else
+                    {
+                        float clippedDif = Mathf.Abs(Mathf.Abs(TouchXDiff) - Mathf.Abs(((XposLimitPhys/SideSpeedPhyTargetSpeed)*(Screen.width / 2))));
+                        if(TouchXDiff > 0)
+                        {
+                            FirstTouchPos.x -= clippedDif;
+                        }
+                        else
+                        {
+                            FirstTouchPos.x += clippedDif;
+                        }
                     }
                     float newXpos = Mathf.Clamp(clampedDif, -XposLimitPhys, +XposLimitPhys);
 
@@ -226,8 +251,8 @@ public class PickerController : MonoBehaviour
                     TempVector = PhyTargetTransform.transform.position;
                     TempVector.x = -newXpos;
                     PhyTargetTransform.position = TempVector;
-
-                    if(Mathf.Abs(transform.position.x) <= XposLimitPhys)
+                    
+                    if(Mathf.Abs(transform.position.x - PhyTargetTransform.position.x) > 0.1f)
                     {
                         float xDir = PhyTargetTransform.position.x - transform.position.x;
                         TempVector = RgdBody.velocity;

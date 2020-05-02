@@ -327,8 +327,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ForwardSpeed: 15
-  SideSpeedWithPhys: 22
-  SideSpeedPhyTargetSpeed: 6
+  SideSpeedWithPhys: 25
+  SideSpeedPhyTargetSpeed: 8
   SideSpeedNoPhys: 3
   PushForceOnCheckpoint: 0.75
   XposLimitNoPhys: 1.5
